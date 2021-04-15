@@ -54,7 +54,6 @@ License
     makeInjectionModelType(ManualInjection, CloudType);                       \
     makeInjectionModelType(NoInjection, CloudType);                           \
     makeInjectionModelType(PatchInjection, CloudType);                        \
-    makeInjectionModelType(PatchFlowRateInjection, CloudType);
 
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
