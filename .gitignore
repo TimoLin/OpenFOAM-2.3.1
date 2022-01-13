@@ -2,6 +2,7 @@
 # Lines that start with '#' are comments.
 
 # editor and misc backup files - anywhere
+*.swp
 *~
 .*~
 *.bak
@@ -87,5 +88,6 @@ doc/Doxygen/DTAGS
 # ignore ccls
 compile_commands.json
 .vscode/
+.cache/
 
 # end-of-file
