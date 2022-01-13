@@ -84,4 +84,8 @@ doc/Doxygen/DTAGS
 /.cproject
 /.project
 
+# ignore ccls
+compile_commands.json
+.vscode/
+
 # end-of-file

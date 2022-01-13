@@ -90,23 +90,41 @@ done
 # Check environment variables
 #------------------------------------------------------------------------------
 
-for check in WM_OPTIONS WM_LINK_LANGUAGE WM_DIR
-do
-    eval test "\$$check" || {
-        echo "$Script error: environment variable \$$check not set" 1>&2
-        exit 1
-    }
-done
-
-
-# when compiling anything but a standalone exe:
-# WM_PROJECT and WM_PROJECT_DIR must be set
-[ "$1" = exe -o \( "$WM_PROJECT" -a "$WM_PROJECT_DIR" \) ] || {
+# When compiling anything but a standalone exe WM_PROJECT and WM_PROJECT_DIR
+# must be set
+[ "$1" = exe ] || { [ "$WM_PROJECT" ] && [ "$WM_PROJECT_DIR" ]; } || {
     echo "$Script error:" 1>&2
-    echo "    environment variable \$WM_PROJECT or \$WM_PROJECT_DIR not set" 1>&2
+    echo "    environment variable \$WM_PROJECT or " \
+         "\$WM_PROJECT_DIR not set" 1>&2
     echo "    while building project library" 1>&2
     exit 1
 }
+
+
+#------------------------------------------------------------------------------
+# check if bear is installed and we are not already running under bear
+#------------------------------------------------------------------------------
+
+if [ -z "${RUNNING_UNDER_BEAR}" ] ; then
+    if ! bear --version > /dev/null ; then
+        echo "WARNING: bear is not installed -> There will be no compile_commands.json output." 1>&2
+    elif printf '%s\n%s\n' "bear 3.0.0" "$(bear --version)" | sort -V -C ; then
+        #bear version >= 3.0.0
+        export RUNNING_UNDER_BEAR=true
+        mkdir -p $FOAM_LIBBIN
+        bear --append --output $FOAM_LIBBIN/../compile_commands.json -- wmake $@
+        exit $?
+    elif printf '%s\n%s\n' "bear 2.0.0" "$(bear --version)" | sort -V -C ; then
+        #bear version >= 2.0.0
+        export RUNNING_UNDER_BEAR=true
+        mkdir -p $FOAM_LIBBIN
+        bear --append -o $FOAM_LIBBIN/../compile_commands.json wmake $@
+        exit $?
+    else
+        echo "WARNING: bear version is below 2.0.0 -> There will be no compile_commands.json output." 1>&2
+    fi
+fi
+
 
 
 #------------------------------------------------------------------------------
@@ -319,3 +337,5 @@ then
 fi
 
 #------------------------------------------------------------------------------
+
+
