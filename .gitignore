@@ -89,5 +89,6 @@ doc/Doxygen/DTAGS
 compile_commands.json
 .vscode/
 .cache/
+openfoam.code-workspace
 
 # end-of-file
