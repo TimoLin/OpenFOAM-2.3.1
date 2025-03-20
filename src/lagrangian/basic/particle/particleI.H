@@ -755,10 +755,9 @@ inline void Foam::particle::initCellFacePt()
                     // it should be in, then this is considered an
                     // error.
 
-                    FatalErrorIn("void Foam::particle::initCellFacePt()")
+                    WarningIn("void Foam::particle::initCellFacePt()")
                         << "cell, tetFace and tetPt search failure at position "
-                        << position_ << nl << "for requested cell " << oldCellI
-                        << abort(FatalError);
+                        << position_ << nl << "for requested cell " << oldCellI;
                 }
 
                 // The position is in the (slightly extended)
