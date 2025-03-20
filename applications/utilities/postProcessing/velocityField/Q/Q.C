@@ -70,6 +70,21 @@ void Foam::calc(const argList& args, const Time& runTime, const fvMesh& mesh)
             0.5*(sqr(tr(gradU)) - tr(((gradU)&(gradU))))
         );
 
+        // Calculate Sij of the velocity gradient tensor
+        volSymmTensorField Sij(symm(gradU));
+        volScalarField magS
+        (
+            IOobject
+            (
+                "magS",
+                runTime.timeName(),
+                mesh,
+                IOobject::NO_READ,
+                IOobject::NO_WRITE
+            ),
+            sqrt(2.0)*mag(Sij)
+        );
+
         /*
         // This is a second way of calculating Q, that delivers results
         // very close, but not identical to the first approach.
@@ -101,6 +116,7 @@ void Foam::calc(const argList& args, const Time& runTime, const fvMesh& mesh)
         if (writeResults)
         {
             Q.write();
+            magS.write();
         }
     }
     else
